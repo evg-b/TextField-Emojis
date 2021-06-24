@@ -20,7 +20,6 @@ export class TextField {
         if (newValue !== this.value) {
             this.value = newValue
             this.textFieldInput.innerHTML = newValue
-            // this.restore()
         }
     }
     onFocus() {
@@ -50,7 +49,7 @@ export class TextField {
                 let cleantText = detectHighlightTarget(pastedText)
                 cleantText = cleanUpText(cleantText)
                 cleantText = this.emojiDetect(cleantText)
-                document.execCommand('insertHTML', false, cleantText)
+                document.execCommand('insertHTML', false, cleantText.trim())
             }
         })
         document.addEventListener('selectionchange', () => this.detectAndSaveRange())
@@ -107,21 +106,18 @@ export class TextField {
             return
         }
         let cleantText = detectHighlightTarget(allText)
-        console.log('diffText', allText, cleantText)
         if (allText !== cleantText) {
-            console.log('[highlightRealTime] что-то поменялось заменяем')
-            console.log('[highlightRealTime] alltext:', allText)
-            console.log('[highlightRealTime] cleantText:', cleantText)
-
 
             let realDom = createDOMmap(this.textFieldInput)
             let virtualDom = createDOMmap(stringToHTML(cleantText))
 
             diff(virtualDom, realDom, this.textFieldInput)
+
             this.restore()
         }
-
+        this.textFieldInput.normalize()
         this.onChangeInput && this.onChangeInput(cleantText)
+
     }
 }
 
@@ -141,8 +137,8 @@ function cleanUpText(textPast: string) {
 
 function detectHighlightTarget(nodeText: string) {
     let urlRegex = /(^|\s)https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/ig
-    let hashtagsRegex = /(#[A-Za-z0-9]*\b)[\s]/ig
-    let MenschenRegex = /(@[A-Za-z0-9]*\b)[\s]/ig
+    let hashtagsRegex = /[\s](#[A-Za-zА-Яа-яё0-9]+)[\s]/ig
+    let MenschenRegex = /[\s](@[A-Za-zА-Яа-яё0-9]*\b)[\s]/ig
     let mailRegex = /\S+@\S+\.\S+/ig
 
     let cleantText: string = ''

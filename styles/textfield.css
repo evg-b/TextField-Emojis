@@ -19,6 +19,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     font-size: 14px;
+    font-weight: 500;
     caret-color: var(--evg-color-on-surface-text-input);
     box-sizing: border-box;
     height: inherit;

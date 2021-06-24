@@ -37,28 +37,6 @@ export function createDOMmap(dom: HTMLElement | Node | ChildNode) {
 }
 
 function getAttributes(attributes: NamedNodeMap) {
-    // let attArr: DOMmapType['atts'] = Array.prototype.map<AttsType>((attribute) => {
-    //     return {
-    //         att: (attribute.name as string),
-    //         value: (attribute.value as string)
-    //     }
-    //     // attArr.push({
-    //     //     att: (attribute.name as string),
-    //     //     value: (attribute.value as string)
-    //     // })
-    // })
-
-    // Array.prototype.map.call(attributes, (attribute) => {
-    //     return {
-    //         att: (attribute.name as string),
-    //         value: (attribute.value as string)
-    //     }
-    //     // attArr.push({
-    //     //     att: (attribute.name as string),
-    //     //     value: (attribute.value as string)
-    //     // })
-    // })
-    // return attArr
     return Array.prototype.map.call(attributes, function (attribute) {
         return {
             att: attribute.name,
@@ -68,13 +46,10 @@ function getAttributes(attributes: NamedNodeMap) {
 };
 
 export function diff(virtualDom: DOMmapType[], realDom: DOMmapType[], realNode: HTMLElement | Node | ChildNode) {
-    console.log('diff start:', virtualDom, realDom)
     let count = realDom.length - virtualDom.length;
-    console.log('diff count:', count)
 
     // remove
     if (count > 0) {
-        console.log('diff remove лишнее:')
         // значит удаляем лишнее
         for (; count > 0; count--) {
             realDom[realDom.length - count].node.parentNode?.removeChild(realDom[realDom.length - count].node)
@@ -85,21 +60,18 @@ export function diff(virtualDom: DOMmapType[], realDom: DOMmapType[], realNode: 
     virtualDom.forEach((node, index) => {
         // add
         if (!realDom[index]) {
-            console.log('diff: add ', virtualDom[index])
             realNode.appendChild(createElement(virtualDom[index]))
             return
         }
 
         // Если элемент не того же типа, заменяем его новым элементом
         if (virtualDom[index].type !== realDom[index].type) {
-            console.log('diff: update ', virtualDom[index])
             realDom[index].node.parentNode?.replaceChild(createElement(virtualDom[index]), realDom[index].node)
             return
         }
 
         // Если контент отличается, обновляем его
         if (virtualDom[index].content !== realDom[index].content) {
-            console.log('diff: update content ', realDom[index].node.textContent, '->', virtualDom[index].content)
             realDom[index].node.textContent = virtualDom[index].content
             return
         }
@@ -121,13 +93,11 @@ export function diff(virtualDom: DOMmapType[], realDom: DOMmapType[], realNode: 
         }
         // если есть дочерние элементы, ищем различия в рекурсии
         if (node.children) {
-            console.log('diff: diff -> diff child ')
             if (realDom[index].children) {
                 diff(node.children, realDom[index].children!, realDom[index].node);
             }
         }
     })
-    console.log('diff end:', virtualDom, realDom, createDOMmap(realNode))
 }
 
 

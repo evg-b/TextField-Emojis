@@ -20,7 +20,7 @@
     --evg-color-on-surface: #9e9e9e;
     --evg-color-on-surface-text-input: #1f1f1f; 
     --evg-border-radius: 6px;
-    --evg-text-link: #2a5885;
+    --evg-text-link: #5b7ea1;
 }
 body[scheme='dark'] {
     --evg-color-primery: #696969;
