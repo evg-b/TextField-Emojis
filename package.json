@@ -23,8 +23,9 @@
   },
   "author": "evg-b",
   "devDependencies": {
+    "express": "^4.17.1",
     "rollup": "^2.52.1",
-    "typescript": "^4.3.4",
-    "rollup-plugin-terser": "^7.0.2"
+    "rollup-plugin-terser": "^7.0.2",
+    "typescript": "^4.3.4"
   }
 }
