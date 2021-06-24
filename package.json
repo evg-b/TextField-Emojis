@@ -16,7 +16,7 @@
   "main": "dist/bundle.js",
   "scripts": {
     "dev": "rollup --config rollup.config.js --watch",
-    "start": "yarn build:ts && yarn build:rollup",
+    "start": "node app.js",
     "build": "yarn build:ts && yarn build:rollup",
     "build:ts": "tsc",
     "build:rollup": "rollup --config rollup.config.js"
