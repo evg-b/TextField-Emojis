@@ -52,6 +52,6 @@
     color: var(--evg-color-primery);
     transition: color 170ms;
 }
-.textField_icon-button:hover {
+.button-active, .textField_icon-button:hover {
     color: #a8adb8;
 }

@@ -22,6 +22,7 @@ type State = {
     emojis: emojisType[]
     theme: ThemeType
 }
+// Создаем Store
 const store = new Store<State>({
     activeTabIndex: 0,
     inputText: '',
@@ -33,6 +34,7 @@ const store = new Store<State>({
     theme: 'light'
 })
 
+// Достаем из localStorageState если есть старая версия
 const localStorageState = loadState()
 if (localStorageState) {
     store.init({
@@ -41,22 +43,24 @@ if (localStorageState) {
     })
 }
 store.getState()?.activeTabIndex
+// подписываемся на изменения в store
 store.subscribe(observerRender)
 
 const fakeServer = new FakeServer(ArrayEmoji)
 
 const root = document.getElementById('root')
 
+// Создаем общий контейнер для приложения
 const container = document.createElement('div')
 container.className = 'container'
-// container.setAttribute('tabindex', '1')
 
+// Создаем контейнер для Emoji
 const emojiContainer = document.createElement('div')
 emojiContainer.className = 'emoji-container emoji-container-hidden'
 const emojiTail = document.createElement('div')
 emojiTail.className = 'emoji-container-tail'
 
-
+// Создаем компоненты List, и заполняем его Emoji UTF8
 const newListEmoji = new List(store.getState().emojis, onClickEmoji)
 const newListEmojiFavorites = new List([
     {
@@ -65,6 +69,7 @@ const newListEmojiFavorites = new List([
     }
 ], onClickEmoji)
 
+// Описываем содержимое табов
 const tabsBlock = TabsBlock([
     {
         list: newListEmoji.create(),
@@ -102,12 +107,12 @@ root?.append(container, btnTheme)
 
 textField.onFocus()
 
+// init
 getDataEmojiUpdate()
 useChangeTheme(store.getState().theme)
 
 function changeThemeState() {
     let newTheme: ThemeType = howNowTheme() === 'dark' ? 'light' : 'dark'
-
     store.setState(s => ({ ...s, theme: newTheme }))
 }
 
@@ -143,6 +148,8 @@ function onChangeTextField(value: string) {
         inputText: value
     }))
 }
+
+// Следим за границей скролла и если что подгружаем новую порцию Emoji
 function onScrollUpdate(scrollPercentageY: number) {
     if (scrollPercentageY > 90) {
         getDataEmojiUpdate()
@@ -162,7 +169,6 @@ function TabsBlock(lists:
         button: list.buttunIcon
     }))
     const newTabs = new Tabs(tabsContent)
-
     return newTabs
 }
 function TextFieldBlock() {
@@ -170,6 +176,7 @@ function TextFieldBlock() {
     return newTextField
 }
 
+// вешаем один EventListener для двух задач
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Tab') {
         e.preventDefault()
@@ -193,6 +200,7 @@ document.addEventListener('keydown', (e) => {
 
 function observerRender(oldState: State, newState: State) {
 
+    // 0 save State в LocalStorage
     saveState({
         activeTabIndex: newState.activeTabIndex,
         theme: newState.theme,
@@ -200,11 +208,7 @@ function observerRender(oldState: State, newState: State) {
         favoritesCount: newState.favoritesCount,
         favorites: Array.from(newState.favorites.entries())
     })
-    // 1
-    if (oldState.activeTabIndex !== newState.activeTabIndex) {
-        // tabsBlock.setIndexActiveTab(newState.activeTabIndex)
-    }
-    // 2 если изменилось количество в favoritesCount то делаем перерасчет и обновляем лист
+    // 1 если изменилось количество в favoritesCount то делаем перерасчет и обновляем лист
     if (oldState.favoritesCount !== newState.favoritesCount) {
         newListEmojiFavorites.newList([{
             "title": "Часто используемые",
@@ -212,28 +216,25 @@ function observerRender(oldState: State, newState: State) {
         }]
         )
     }
-    // 3 изменения в inputText
-    if (oldState.inputText !== newState.inputText) {
-
-    }
-    // 4 изменения в showEmoji
+    // 2 изменения в showEmoji
     if (oldState.showEmoji !== newState.showEmoji) {
         // показывать или скрывать emoji контайнер
         if (newState.showEmoji) {
             emojiContainer.classList.remove('emoji-container-hidden')
-
+            btnIcon.classList.add('button-active')
         } else {
             emojiContainer.classList.add('emoji-container-hidden')
+            btnIcon.classList.remove('button-active')
         }
         textField.onFocus()
     }
-    // 4 изменения в showEmoji
+    // 3 изменения в showEmoji
     if (oldState.cursor !== newState.cursor) {
         if (newState.cursor !== -1) {
             newListEmoji.updateList(newState.emojis)
         }
     }
-    // 5 изменения в theme
+    // 4 изменения в theme
     if (oldState.theme !== newState.theme) {
         useChangeTheme(newState.theme)
         btnTheme.classList.toggle(`btn-theme-${oldState.theme}`)
