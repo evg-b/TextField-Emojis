@@ -166,7 +166,7 @@ function observerRender(oldState, newState) {
 }
 ```
 
-### Highlight
+### Highlight `url` | `mail` | `#` | `@`
 
 Замена в real-time нужных вхождений реализована через DOM diffing подход.
 При выявлении изменений в подсветке, создается [VirtualDom](src/ui/utils/virtualDom.ts) у node с атрибутом `contenteditable="true"` и заменяет потомков которые изменились.
