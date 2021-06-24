@@ -17,10 +17,14 @@ jobs:
         with:
           node-version: 12
 
+      - name: tsc compile
+        run: tsc
+
       - name: Install and Build 😈
         run: |
           yarn
           yarn build
+
       - name: Deploy 🤪
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
