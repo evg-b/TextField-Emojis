@@ -7,6 +7,6 @@ app.get('/', function (req, res) {
     res.sendfile('index.html');
 });
 
-app.listen(process.env.PORT || 10666);
+app.listen(process.env.PORT || 8080);
 
 console.log('Сервер стартовал!');
