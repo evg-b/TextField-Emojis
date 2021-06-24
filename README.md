@@ -1,6 +1,6 @@
 ## TextField Emoji
 
-Поле ввода с интерфейсом для добавления эмоджи и highlight. [Demo](https://evg-b.github.io/textField-emojis/)
+Поле ввода с интерфейсом для добавления эмоджи и highlight. [Demo](https://textfield-emojis.herokuapp.com/)
 
 ![Поле ввода с раскрытым интерфейсом выбора эмоджи](preview/app.png)
 

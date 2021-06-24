@@ -16,7 +16,6 @@ export class TextField {
     saveRange = new Range
     selectStart = 0
     selectEnd = 0
-    prevMatchTagsText = ''
     setValue(newValue: string) {
         if (newValue !== this.value) {
             this.value = newValue
@@ -48,13 +47,10 @@ export class TextField {
             e.preventDefault()
             let pastedText = e.clipboardData?.getData('text/html') || e.clipboardData?.getData('text/plain')
             if (pastedText) {
-                let { cleantText, matchTags } = detectHighlightTarget(pastedText)
-                this.prevMatchTagsText = matchTags.join('')
+                let cleantText = detectHighlightTarget(pastedText)
+                cleantText = cleanUpText(cleantText)
                 cleantText = this.emojiDetect(cleantText)
-                console.log('past:', cleantText)
-                cleantText = cleanUpText(cleantText).trim()
-                this.addContentInRange(cleantText)
-                // this.restore()
+                document.execCommand('insertHTML', false, cleantText)
             }
         })
         document.addEventListener('selectionchange', () => this.detectAndSaveRange())
@@ -72,16 +68,12 @@ export class TextField {
     addEmoji(emojiUTF8: string) {
         this.addContentInRange(buildEmoji(emojiUTF8, 'mini'))
     }
-    addContentInRange(content: string | HTMLElement) {
+    addContentInRange(content: HTMLElement) {
         let select = window.getSelection() || document.getSelection()
         if (this.saveRange.startOffset !== this.saveRange.endOffset) {
             this.saveRange.deleteContents()
         }
-
-        let contentNode = document.createDocumentFragment()
-        contentNode.append(content)
-
-        this.saveRange.insertNode(contentNode)
+        this.saveRange.insertNode(content)
         this.saveRange.collapse(false)
         select?.addRange(this.saveRange)
     }
@@ -108,71 +100,60 @@ export class TextField {
         }
     }
     highlightRealTime(e: MutationRecord[]) {
-        let allText = this.textFieldInput.innerText
+        let allText = this.textFieldInput.innerHTML
         if (fixContentaditable(this.textFieldInput.innerHTML)) {
             this.textFieldInput.innerHTML = ''
             this.onChangeInput && this.onChangeInput('')
             return
         }
-        let { cleantText, matchTags } = detectHighlightTarget(allText)
-        let matchTagsText = matchTags.join('')
-        let lastMatchTagsText = this.prevMatchTagsText
-        if (this.prevMatchTagsText !== matchTagsText) {
-            this.prevMatchTagsText = matchTagsText
+        let cleantText = detectHighlightTarget(allText)
+        console.log('diffText', allText, cleantText)
+        if (allText !== cleantText) {
             console.log('[highlightRealTime] что-то поменялось заменяем')
-            console.log('[highlightRealTime] вот', lastMatchTagsText, matchTagsText)
+            console.log('[highlightRealTime] alltext:', allText)
+            console.log('[highlightRealTime] cleantText:', cleantText)
 
-            let newTextFieldInput = document.createElement('div')
-            newTextFieldInput.innerHTML = cleantText
-
-            const countOldNodes = this.textFieldInput.childNodes.length
-            const countNewNodes = newTextFieldInput.childNodes.length
-            console.log('[highlightRealTime] old count:', countOldNodes)
-            console.log('[highlightRealTime] new count:', countNewNodes)
 
             let realDom = createDOMmap(this.textFieldInput)
             let virtualDom = createDOMmap(stringToHTML(cleantText))
 
             diff(virtualDom, realDom, this.textFieldInput)
+            this.restore()
         }
+
         this.onChangeInput && this.onChangeInput(cleantText)
     }
 }
 
 function cleanUpText(textPast: string) {
-    let tagRegex = /<[^>]+>/gim
-    let styleTagRegex = /<style\b[^>]*>([\s\S]*?)<\/style>/gim
-    let style = /style="([^"]*)"/gim
-    let validTagsRegex = /<br[\s\/]*>|<img.*? class="emoji" src="(.*?)">/i
+    let tagRegex = /<[^>]+>/igm
+    let style = /(style="[^"]*")/igm
+    let validTagsRegex = /(<img class="emoji" src=".*" >)|(<br\/?>)/igm
 
-    return textPast
-        .replace(styleTagRegex, '')
+    let res = textPast
         .replace(style, '')
         .replace(tagRegex, function (tag) {
             return tag.match(validTagsRegex) ? tag : '';
         })
         .replace(/\n/g, '')
+    return res
 }
 
-function detectHighlightTarget(text: string) {
+function detectHighlightTarget(nodeText: string) {
     let urlRegex = /(^|\s)https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/ig
-    let hashtagsRegex = /(^|\s)(#[a-z\d-]+)/ig
-    let MenschenRegex = /^|\s(@[a-z\d-]+)/ig
+    let hashtagsRegex = /(#[A-Za-z0-9]*\b)[\s]/ig
+    let MenschenRegex = /(@[A-Za-z0-9]*\b)[\s]/ig
     let mailRegex = /\S+@\S+\.\S+/ig
 
-    let matchTags: string[] = []
+    let cleantText: string = ''
 
-    let cleantText = text
-        .replace(urlRegex, (tag) => `<a>${addTag(matchTags, tag)}</a>`)
-        .replace(mailRegex, (tag) => `<a>${addTag(matchTags, tag)}</a>`)
-        .replace(MenschenRegex, (tag) => `<a>${addTag(matchTags, tag)}</a>`)
-        .replace(hashtagsRegex, (tag) => `<a>${addTag(matchTags, tag)}</a>`)
+    cleantText = nodeText
+        .replace(urlRegex, (tagA, taB) => `<a>${taB}</a> `)
+        .replace(mailRegex, (tagA, taB) => `<a>${taB}</a> `)
+        .replace(MenschenRegex, (tagA, taB) => `<a>${taB}</a> `)
+        .replace(hashtagsRegex, (tagA, taB) => `<a>${taB}</a> `)
 
-    return { cleantText, matchTags }
-}
-function addTag(arr: string[], tag: string) {
-    arr.push(tag)
-    return tag
+    return cleantText
 }
 function fixContentaditable(string: string) {
     return string === '<br>'

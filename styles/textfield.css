@@ -11,6 +11,7 @@
 }
 .textField_input {
     word-break: break-word;
+    resize: none;
     display: inline-block;
     outline: none;
     width: 100%;

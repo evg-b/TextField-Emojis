@@ -12,7 +12,7 @@
     "ts"
   ],
   "repository": "https://github.com/evg-b/TextField-Emojis",
-  "homepage": "https://evg-b.github.io/textField-emojis",
+  "homepage": "https://github.com/evg-b/TextField-Emojis",
   "main": "dist/bundle.js",
   "scripts": {
     "dev": "rollup --config rollup.config.js --watch",

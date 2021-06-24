@@ -2,27 +2,32 @@
  * Воссоздать DOM diffing сама по себе интересная задача
  * Тут урезанный функционал, для отслеживания highlight в реальном времени.
 */
-
+type AttsType = {
+    att: string, value: string
+}
 type DOMmapType = {
     content: string | null
     type: string,
     node: Node
+    atts?: AttsType[]
     children?: DOMmapType[]
 }
 
 export function stringToHTML(value: string) {
-    var parser = new DOMParser()
-    var doc = parser.parseFromString(value, 'text/html')
+    let parser = new DOMParser()
+    let doc = parser.parseFromString(value, 'text/html')
     return doc.body
 }
 
 export function createDOMmap(dom: HTMLElement | Node | ChildNode) {
     let domMap: DOMmapType[] = []
     dom.childNodes.forEach(node => {
+
         domMap.push(
             {
                 content: node.textContent,
                 type: node.nodeType === 3 ? 'text' : (node.nodeType === 8 ? 'comment' : node.nodeName.toLowerCase()),
+                atts: node.nodeType !== 1 ? [] : (getAttributes((node as Element).attributes) as AttsType[]),
                 node: node,
                 children: createDOMmap(node)
             }
@@ -30,6 +35,37 @@ export function createDOMmap(dom: HTMLElement | Node | ChildNode) {
     })
     return domMap
 }
+
+function getAttributes(attributes: NamedNodeMap) {
+    // let attArr: DOMmapType['atts'] = Array.prototype.map<AttsType>((attribute) => {
+    //     return {
+    //         att: (attribute.name as string),
+    //         value: (attribute.value as string)
+    //     }
+    //     // attArr.push({
+    //     //     att: (attribute.name as string),
+    //     //     value: (attribute.value as string)
+    //     // })
+    // })
+
+    // Array.prototype.map.call(attributes, (attribute) => {
+    //     return {
+    //         att: (attribute.name as string),
+    //         value: (attribute.value as string)
+    //     }
+    //     // attArr.push({
+    //     //     att: (attribute.name as string),
+    //     //     value: (attribute.value as string)
+    //     // })
+    // })
+    // return attArr
+    return Array.prototype.map.call(attributes, function (attribute) {
+        return {
+            att: attribute.name,
+            value: attribute.value
+        };
+    });
+};
 
 export function diff(virtualDom: DOMmapType[], realDom: DOMmapType[], realNode: HTMLElement | Node | ChildNode) {
     console.log('diff start:', virtualDom, realDom)
@@ -78,7 +114,7 @@ export function diff(virtualDom: DOMmapType[], realDom: DOMmapType[], realNode: 
 
         if (realDom[index].children && node.children) {
 
-            var fragment = document.createDocumentFragment();
+            let fragment = document.createDocumentFragment();
             diff(node.children, realDom[index].children!, fragment);
             realNode.appendChild(fragment);
             return;
@@ -104,6 +140,8 @@ function createElement(vNode: DOMmapType) {
         node = document.createElement(vNode.type)
     }
 
+    addAttributes((node as Element), vNode.atts)
+
     // создаем дочерние элементы если имеются
     if (vNode.children) {
         vNode.children.forEach(function (childElem) {
@@ -115,3 +153,13 @@ function createElement(vNode: DOMmapType) {
 
     return node;
 }
+
+function addAttributes(elem: Element, atts?: AttsType[]) {
+    atts && atts.forEach(function (attribute) {
+        if (attribute.att === 'class') {
+            elem.className = attribute.value;
+        } else {
+            elem.setAttribute(attribute.att, attribute.value);
+        }
+    });
+};
