@@ -3,8 +3,10 @@
     padding: 4px 0;
     min-height: 34px;
     max-height: 200px;
-    border: 1px solid var(--evg-color-primery);
+    outline: none;
+    appearance: none;
     overflow: hidden;
+    border: 1px solid var(--evg-color-primery);
     border-radius: var(--evg-border-radius);
     background-color: var(--evg-color-surface);
     color: var(--evg-color-on-surface-text-input);
@@ -14,6 +16,7 @@
     resize: none;
     display: inline-block;
     outline: none;
+    appearance: none;
     width: 100%;
     padding: 8px 40px 6px 11px;
     overflow-y: auto;

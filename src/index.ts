@@ -49,6 +49,7 @@ const root = document.getElementById('root')
 
 const container = document.createElement('div')
 container.className = 'container'
+// container.setAttribute('tabindex', '1')
 
 const emojiContainer = document.createElement('div')
 emojiContainer.className = 'emoji-container emoji-container-hidden'
@@ -106,7 +107,7 @@ useChangeTheme(store.getState().theme)
 
 function changeThemeState() {
     let newTheme: ThemeType = howNowTheme() === 'dark' ? 'light' : 'dark'
-    useChangeTheme(newTheme)
+
     store.setState(s => ({ ...s, theme: newTheme }))
 }
 
@@ -169,6 +170,24 @@ function TextFieldBlock() {
     return newTextField
 }
 
+document.addEventListener('keydown', (e) => {
+    console.log('container', e.key)
+    if (e.key === 'Tab') {
+        e.preventDefault()
+        store.setState(s => ({
+            ...s,
+            showEmoji: !s.showEmoji
+        }))
+    }
+    if (e.ctrlKey && e.key === '`') {
+        e.preventDefault()
+        store.setState(s => ({
+            ...s,
+            theme: s.theme === 'dark' ? 'light' : 'dark'
+        }))
+    }
+})
+
 /**
  * observerRender подписан на изменения в сторе и принимает решения что изменять
 */
@@ -201,6 +220,14 @@ function observerRender(oldState: State, newState: State) {
     // 4 изменения в showEmoji
     if (oldState.showEmoji !== newState.showEmoji) {
         // показывать или скрывать emoji контайнер
+        console.log('newState.showEmoji', newState.showEmoji)
+        if (newState.showEmoji) {
+            emojiContainer.classList.remove('emoji-container-hidden')
+
+        } else {
+            emojiContainer.classList.add('emoji-container-hidden')
+        }
+        textField.onFocus()
     }
     // 4 изменения в showEmoji
     if (oldState.cursor !== newState.cursor) {
@@ -210,6 +237,7 @@ function observerRender(oldState: State, newState: State) {
     }
     // 5 изменения в theme
     if (oldState.theme !== newState.theme) {
+        useChangeTheme(newState.theme)
         btnTheme.classList.toggle(`btn-theme-${oldState.theme}`)
         btnTheme.classList.toggle(`btn-theme-${newState.theme}`)
     }

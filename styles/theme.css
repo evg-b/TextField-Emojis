@@ -18,6 +18,7 @@
     --evg-color-background: #ffffff;
     --evg-color-surface: #ffffff;
     --evg-color-on-surface: #9e9e9e;
+    --evg-color-on-surface-hover: rgba(0,0,0,.05);
     --evg-color-on-surface-text-input: #1f1f1f; 
     --evg-border-radius: 6px;
     --evg-text-link: #5b7ea1;
@@ -27,6 +28,7 @@ body[scheme='dark'] {
     --evg-color-secondary: #383838;
     --evg-color-surface: #2b2b2b;
     --evg-color-background: #121212;
+    --evg-color-on-surface-hover: rgba(255,255,255,.1);
     --evg-color-on-surface-text-input: #a3a3a3; 
     --evg-text-link: #a3a3a3;
 }

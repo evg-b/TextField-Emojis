@@ -5,6 +5,8 @@
     overflow: scroll;
 }
 .scroll-container, .scroll-overflow {
+    outline: none;
+    appearance: none;
     width: inherit;
     height: inherit;
     max-width: inherit;

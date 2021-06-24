@@ -4,6 +4,7 @@ body {
 .container {
     position: relative;
     width: 300px;
+    outline:none;
 }
 .emoji-container {
     z-index: 0;

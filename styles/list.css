@@ -21,10 +21,10 @@
     appearance: none;
     -webkit-tap-highlight-color: transparent;
 }
-.item_cont:hover {
+.item_cont:hover,.item_cont:focus {
     /* тоже добавить цвет из темы  */
-    /* background-color: var(--evg-color-on-surface); */
-    background-color: rgba(0,0,0,.05);
+    background-color: var(--evg-color-on-surface-hover);
+    /* background-color: rgba(0,0,0,.05); */
 }
 .emoji {
     display: inline-block;

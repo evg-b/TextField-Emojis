@@ -24,11 +24,11 @@
   ```ts
   new TextField(
     placeholder:    string           // текст для placeholder
-    actionElement:  HTMLElement | '' // содержимое для активной облости в левом углу (button)
+    actionElement:  HTMLElement | '' // содержимое для активной области в левом углу (button)
     onChangeInput?: (string)         // return valueInput при изменении
   )
   create():HTMLElement               // return HTMLElement Scroll Overflow
-  onFocus()                          // фокус на contenteditable елементе 
+  onFocus()                          // фокус на contenteditable элементе 
   ```
 </details>
 
@@ -61,7 +61,7 @@
   ```ts
   new Scroll(
     children:  HTMLElement // оборачивает children в контейнер со скроллом
-    onUpdate?: (number)    // return number - процент пройденого расстояния от начала
+    onUpdate?: (number)    // return number - процент пройденного расстояния от начала
   )
   create():HTMLElement     // return HTMLElement Scroll Overflow
   ```
@@ -102,7 +102,7 @@
       deltaX: number
       deltaY: number
   }
-  // принимает 3 callback функии
+  // принимает 3 callback функции
   new TouchDriver(
     moveStart(MoveCoord) // return MoveCoord при касании к области внутри компонента
     move(MoveCoord)      // return MoveCoord при движении курсора или пальца по области компонента
@@ -170,3 +170,13 @@ function observerRender(oldState, newState) {
 
 Замена в real-time нужных вхождений реализована через DOM diffing подход.
 При выявлении изменений в подсветке, создается [VirtualDom](src/ui/utils/virtualDom.ts) у node с атрибутом `contenteditable="true"` и заменяет потомков которые изменились.
+
+### Keyboard
+
+`Tab` - открыть/закрыть окно с emoji.
+
+`ctrl` + `ё` - сменить тему.
+
+`Left` `Right` `Up` `Down` - перемещение в окне emoji.
+
+`Enter` - выбор emoji в окне.

@@ -7,13 +7,13 @@ export default function buildEmoji(emojiUTF8: string, mode: 'full' | 'mini' = 'f
     if (mode === 'mini') {
         emoji.className = `emoji`
         emoji.setAttribute('src', `/emoji/e/${emojiHEX}.png`)
-        // emoji.setAttribute('alt', emojiUTF8)
         return emoji
     }
     emoji.className = `emoji @${emojiHEX}`
     const itemBox = document.createElement('div')
     itemBox.setAttribute('data-hex', emojiHEX)
     itemBox.setAttribute('data-utf8', emojiUTF8)
+    itemBox.setAttribute('tabindex', '0')
     itemBox.className = `item_cont`
 
     itemBox.append(emoji)

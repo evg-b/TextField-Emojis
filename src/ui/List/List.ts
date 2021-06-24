@@ -22,6 +22,48 @@ export class List {
                 this.onClick(target.dataset.utf8)
             }
         })
+        list.addEventListener('keydown', (e) => {
+
+            const target = (e.target as HTMLDivElement)
+            const index = Number(target.attributes.getNamedItem('index')?.value)
+
+            if (target.className === 'item_cont' && e.key === 'Enter') {
+                e.preventDefault()
+                this.onClick(target.dataset.utf8)
+            }
+            if (e.key === 'ArrowRight' || e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                e.preventDefault()
+            }
+            // передвигаемся по emoji с помощью Sibling соседей и по index у соседей с верху и с низу
+            if (target.className === 'item_cont' && e.key === 'ArrowRight') {
+                let next = (target.nextSibling as HTMLElement)
+                if (next) {
+                    next.focus()
+                } else {
+                    target.parentElement && (target.parentElement.nextSibling?.firstChild as HTMLElement).focus()
+                }
+            }
+            if (target.className === 'item_cont' && e.key === 'ArrowLeft') {
+                let prev = (target.previousElementSibling as HTMLElement)
+                if (prev) {
+                    prev.focus()
+                } else {
+                    target.parentElement && (target.parentElement.previousSibling?.lastChild as HTMLElement).focus()
+                }
+            }
+            if (target.className === 'item_cont' && e.key === 'ArrowUp') {
+                let parent = target.parentElement?.previousSibling
+                if (parent) {
+                    try { (parent.childNodes.item(index) as HTMLElement).focus() } catch { }
+                }
+            }
+            if (target.className === 'item_cont' && e.key === 'ArrowDown') {
+                let parent = target.parentElement?.nextSibling
+                if (parent) {
+                    try { (parent.childNodes.item(index) as HTMLElement).focus() } catch { }
+                }
+            }
+        })
 
         return list
     }
@@ -39,8 +81,9 @@ export class List {
                 const rowItems = document.createElement('div')
                 rowItems.className = 'row_items'
 
-                let dressedItems10 = items10.map(item => {
+                let dressedItems10 = items10.map((item, index) => {
                     const emoji = buildEmoji(item)
+                    emoji.setAttribute('index', `${index}`)
                     return emoji
                 })
                 rowItems.append(...dressedItems10)
