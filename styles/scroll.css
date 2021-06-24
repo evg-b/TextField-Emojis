@@ -1,0 +1,48 @@
+.scroll-container {
+    position: relative;
+}
+.scroll-overflow {
+    overflow: scroll;
+}
+.scroll-container, .scroll-overflow {
+    width: inherit;
+    height: inherit;
+    max-width: inherit;
+    min-width: inherit;
+    max-height: inherit;
+    min-height: inherit;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+.scroll-overflow::-webkit-scrollbar {
+    display: none;
+}
+.scroll-track {
+    z-index: 1;
+    cursor: pointer;
+    display: var(--evg-scroller-show);
+    position: absolute;
+    border-radius: 5px 5px;
+}
+.scroll-track::after {
+    content: '';
+    position: absolute;
+    /* тут цвет primary */
+    background-color: var(--evg-color-primery);
+    border-radius: 5px 5px;
+}
+
+.scroll-track-y {
+    top: 0;
+    right: 4px;
+    width: 6px;
+    height: 100%;
+}
+.scroll-track-y::after {
+    right: 0px;
+    width: 6px;
+    height: var(--evg-scroller-size-y); 
+    transition: height 170ms;
+    transform: translateY(var(--evg-scroller-y));
+    will-change: transform;    
+}

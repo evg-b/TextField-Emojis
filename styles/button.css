@@ -1,0 +1,7 @@
+.button {
+    outline: none;
+    text-decoration: none;
+    user-select: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+}

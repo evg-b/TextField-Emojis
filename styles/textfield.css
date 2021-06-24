@@ -1,0 +1,52 @@
+.textField_base {
+    position: relative;
+    padding: 4px 0;
+    min-height: 34px;
+    max-height: 200px;
+    border: 1px solid var(--evg-color-primery);
+    overflow: hidden;
+    border-radius: var(--evg-border-radius);
+    background-color: var(--evg-color-surface);
+    color: var(--evg-color-on-surface-text-input);
+}
+.textField_input {
+    word-break: break-word;
+    display: inline-block;
+    outline: none;
+    width: 100%;
+    padding: 8px 40px 6px 11px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: 14px;
+    caret-color: var(--evg-color-on-surface-text-input);
+    box-sizing: border-box;
+    height: inherit;
+    transition: height 2000ms;
+}
+[contenteditable=true]:empty:before {
+    content: attr(placeholder);
+    color: #a8adb8;
+    pointer-events: none;
+    display: block;
+}
+
+[contenteditable=true]:empty:not(:focus):before {
+    content: attr(placeholder);
+    pointer-events: none;
+    display: block;
+}
+
+.textField_icon-button {
+    z-index: 1;
+    cursor: pointer;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top: 10px;
+    right: 8px;
+    color: var(--evg-color-primery);
+    transition: color 170ms;
+}
+.textField_icon-button:hover {
+    color: #a8adb8;
+}

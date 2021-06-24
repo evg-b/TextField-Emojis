@@ -1,0 +1,65 @@
+body {
+    background-color: var(--evg-color-background);
+}
+.container {
+    position: relative;
+    width: 300px;
+}
+.emoji-container {
+    z-index: 0;
+    display: flex;
+    opacity: 1;
+    flex-direction: column;
+    position: absolute;
+    width: 100%;
+    bottom: calc(100% + 10px); 
+
+    /* todo: поменять на Eleven*/
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.0));
+    border: 1px solid var(--evg-color-primery);
+    border-radius: var(--evg-border-radius);
+    box-sizing: border-box;
+    transition: opacity 250ms;
+}
+.emoji-container-hidden {
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+}
+.emoji-container-tail {
+    position: absolute;
+    z-index: -1;
+    right: 21px;
+    bottom: 10px;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.emoji-container-tail::before {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: var(--evg-color-secondary);
+    border: 1px solid var(--evg-color-primery);
+    border-radius: 4px;
+}
+.btn-theme {
+    cursor: pointer;
+    user-select: none;
+    position: fixed;
+    right: 30px;
+    top: 20px;
+    width: 48px;
+    height: 48px;
+    opacity: 0.5;
+    transition: opacity 100ms;
+}
+.btn-theme:hover {
+    opacity: 0.7;
+}
+.btn-theme-light {    
+    background-image: url(data:image/svg+xml;charset=utf-8,%3Csvg%20height%3D%2248%22%20viewBox%3D%220%200%2048%2048%22%20width%3D%2248%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cpath%20d%3D%22m0%200h48v48h-48z%22%2F%3E%3Cpath%20d%3D%22m19.4673411%2011.2326905c-4.4129352%202.0784574-7.4673411%206.5661861-7.4673411%2011.7673095%200%207.1797017%205.8202983%2013%2013%2013%205.20282%200%209.6917798-3.0563989%2011.7693427-7.4716601-4.5466308%201.9925303-10.2748059.9391439-14.2570083-3.0430585-3.9809128-3.9809129-5.0349062-9.7066677-3.0449933-14.2525909z%22%20stroke%3D%22%23000%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%222%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E);
+}
+.btn-theme-dark {
+    background-image: url(data:image/svg+xml;charset=utf-8,%3Csvg%20height%3D%2248%22%20viewBox%3D%220%200%2048%2048%22%20width%3D%2248%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cpath%20d%3D%22m0%200h48v48h-48z%22%2F%3E%3Cpath%20d%3D%22m19.4673411%2011.2326905c-4.4129352%202.0784574-7.4673411%206.5661861-7.4673411%2011.7673095%200%207.1797017%205.8202983%2013%2013%2013%205.20282%200%209.6917798-3.0563989%2011.7693427-7.4716601-4.5466308%201.9925303-10.2748059.9391439-14.2570083-3.0430585-3.9809128-3.9809129-5.0349062-9.7066677-3.0449933-14.2525909z%22%20fill%3D%22%23fff%22%20stroke%3D%22%23fff%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%222%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E);
+}

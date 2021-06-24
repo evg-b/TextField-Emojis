@@ -1,0 +1,36 @@
+.list {
+    background-color: var(--evg-color-surface);
+}
+.row_title {
+    position: sticky;
+    top: 0;
+    padding: 10px 5px 6px;
+    background-color: var(--evg-color-surface);
+    color: var(--evg-color-on-surface);
+    letter-spacing: .2px;
+    font-size: 14px;
+}
+.item_cont {
+    display: inline-block;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    outline: none;
+    text-decoration: none;
+    user-select: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.item_cont:hover {
+    /* тоже добавить цвет из темы  */
+    /* background-color: var(--evg-color-on-surface); */
+    background-color: rgba(0,0,0,.05);
+}
+.emoji {
+    display: inline-block;
+    pointer-events: none;
+    box-sizing: border-box;
+    width: 16px;
+    height: 16px;   
+    vertical-align: -3px; 
+}
