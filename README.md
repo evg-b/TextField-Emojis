@@ -128,7 +128,7 @@
 
 </details>
 
-- [Icons](src/ui/icons/Icons.ts) - Иконки `{ Smile, Clock }`. 
+- [Icons](src/ui/Icons/Icons.ts) - Иконки `{ Smile, Clock }`. 
 
 ### Store и render
 
