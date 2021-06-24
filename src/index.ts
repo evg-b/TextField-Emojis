@@ -171,7 +171,6 @@ function TextFieldBlock() {
 }
 
 document.addEventListener('keydown', (e) => {
-    console.log('container', e.key)
     if (e.key === 'Tab') {
         e.preventDefault()
         store.setState(s => ({
@@ -220,7 +219,6 @@ function observerRender(oldState: State, newState: State) {
     // 4 изменения в showEmoji
     if (oldState.showEmoji !== newState.showEmoji) {
         // показывать или скрывать emoji контайнер
-        console.log('newState.showEmoji', newState.showEmoji)
         if (newState.showEmoji) {
             emojiContainer.classList.remove('emoji-container-hidden')
 

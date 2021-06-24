@@ -76,9 +76,9 @@ export function diff(virtualDom: DOMmapType[], realDom: DOMmapType[], realNode: 
             return
         }
 
+        // подумаю еще включать или нет
         // удаление дочерних элементов
         // if (realDom[index].children) {
-        //     console.log('diff: delete child ')
         //     realDom[index].node.nodeValue = ''
         //     return
         // }
