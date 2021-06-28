@@ -49,6 +49,7 @@ export class Scroll {
 
         return scrollContainer
     }
+    // Вычисляем на сколько сдвинулся track (курсором или жестом) и двигаем track и контайнер на нужную дистанцию. 
     calcPosition(newPositionScroll: number = 0) {
         const { scrollOverflow, scrollContainer } = this
         const space = getSpace(scrollContainer, scrollOverflow)
@@ -66,6 +67,7 @@ export class Scroll {
             scrollToY = ratioShift * newPositionScroll
             setEvgCssVar(scrollContainer, '--evg-scroller--y', `${scrollToY}px`)
         } else {
+            // Если кординаты превышают начальную границу скрола, то просто оставляем его на начальной позиции (startScroll). Так же с конечной границей. (endScroll)
             if (Math.sign(newPositionScroll) === -1) {
                 scrollToY = startScroll
                 setEvgCssVar(scrollContainer, '--evg-scroller--y', `${scrollToY}px`)
@@ -77,6 +79,7 @@ export class Scroll {
 
         scrollOverflow.scrollTo(0, scrollToY)
     }
+    // Вычисляем новое положение track и сдвигаем его при срабатывании события onscroll
     onMoveScroll(e: Event) {
         const { scrollContainer, scrollOverflow } = this
         const { container, overflow } = getSpace(scrollContainer, scrollOverflow)
@@ -90,6 +93,8 @@ export class Scroll {
 
         this.onScrollDetectPosition(scrollPercentageY)
     }
+    // callback для TouchDriver
+    // высчитываем новую позицию track и скролл контента при нажатие
     onStart(e: MoveCoord) {
         let { scrollContainer, scrollOverflow, isTouchTrack } = this
         const { nowY } = e
@@ -105,10 +110,13 @@ export class Scroll {
         }
 
     }
+    // callback для TouchDriver
+    // посылаем новые координаты в calcPosition() чтобы менять позицию скролла во время движения.
     onMoveY(e: MoveCoord) {
         this.prevNowY += e.deltaY
         this.calcPosition(this.prevNowY)
     }
+    // callback для TouchDriver
     onMoveEnd() {
         this.isTouchTrack = false
     }
@@ -140,6 +148,7 @@ function calcScrollerSize(space: Space): Space['container'] {
         y: (container.y / overflow.y) * container.y
     }
 }
+// Выясняем, нужно ли показывать track. Если высота прокручиваемого контейнера больше видимой облости, то показываем.
 function satisfactorySize(containerNode: HTMLElement, overflowNode: HTMLElement) {
     const space = getSpace(containerNode, overflowNode)
     let isShow = false

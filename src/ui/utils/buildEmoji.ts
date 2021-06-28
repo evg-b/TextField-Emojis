@@ -1,5 +1,9 @@
 import stringToHex from './stringToHex';
 
+/**
+ * full - для отображения в List
+ * mini - для отображения в contenteditable
+*/
 export default function buildEmoji(emojiUTF8: string, mode: 'full' | 'mini' = 'full') {
     const emojiHEX = stringToHex(emojiUTF8)
     const emoji = document.createElement(mode === 'full' ? 'i' : 'img')

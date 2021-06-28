@@ -67,6 +67,7 @@ export class TextField {
     addEmoji(emojiUTF8: string) {
         this.addContentInRange(buildEmoji(emojiUTF8, 'mini'))
     }
+    // Добавляем новый Emoji в то место где был курсор
     addContentInRange(content: HTMLElement) {
         let select = window.getSelection() || document.getSelection()
         if (this.saveRange.startOffset !== this.saveRange.endOffset) {
@@ -90,6 +91,7 @@ export class TextField {
         sel?.removeAllRanges()
         sel?.addRange(this.saveRange)
     }
+    // Запоминаем курсор когда работаем в области по наборе текста
     detectAndSaveRange() {
         let select = window.getSelection() || document.getSelection()
         if (select && select.anchorNode) {
@@ -98,6 +100,10 @@ export class TextField {
             }
         }
     }
+    /**
+     * highlightRealTime - следит за изменением текста в отдельном потоке благодаря MutationObserver
+     * Запускает замену только тогда когда видит что появился новый кандидат(или пропал) для highlight
+    */
     highlightRealTime(e: MutationRecord[]) {
         let allText = this.textFieldInput.innerHTML
         if (fixContentaditable(this.textFieldInput.innerHTML)) {
@@ -106,13 +112,22 @@ export class TextField {
             return
         }
         let cleantText = detectHighlightTarget(allText)
+        // Если появился новый или исчез старый кандидат на highlight тогда запускаем замену.
         if (allText !== cleantText) {
 
             let realDom = createDOMmap(this.textFieldInput)
             let virtualDom = createDOMmap(stringToHTML(cleantText))
 
+            /**
+             * Благодаря VirtualDom мы меняем только то что нужно в contenteditable контейнере
+             * Это позволяет нам повторно не рендерить emoji которые уже есть в тексте.
+            */
             diff(virtualDom, realDom, this.textFieldInput)
 
+            /**
+             * Тут надо восстанавливать позицию курсора, но я этого не успел сделать. А жаль, было бы тогда все идеально. 
+             * Уже нашел решение, пофиксю после того как проверите, а если щас сделаю, будет не честно.
+            */
             this.restore()
         }
         this.textFieldInput.normalize()
@@ -120,7 +135,7 @@ export class TextField {
 
     }
 }
-
+// Чистим текст и пропускаем только то что нужно
 function cleanUpText(textPast: string) {
     let tagRegex = /<[^>]+>/igm
     let style = /(style="[^"]*")/igm
@@ -134,7 +149,10 @@ function cleanUpText(textPast: string) {
         .replace(/\n/g, '')
     return res
 }
-
+/**
+ * Находим в тексте слова для Highlight и заменяем их.
+ * -- тут бы RegExp поправить, но сейчас их править не честно
+*/
 function detectHighlightTarget(nodeText: string) {
     let urlRegex = /(^|\s)https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/ig
     let hashtagsRegex = /[\s](#[A-Za-zА-Яа-яё0-9]+)[\s]/ig
