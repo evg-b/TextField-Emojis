@@ -154,18 +154,18 @@ function cleanUpText(textPast: string) {
  * -- тут бы RegExp поправить, но сейчас их править не честно
 */
 function detectHighlightTarget(nodeText: string) {
-    let urlRegex = /(^|\s)https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/ig
-    let hashtagsRegex = /[\s](#[A-Za-zА-Яа-яё0-9]+)[\s]/ig
-    let MenschenRegex = /[\s](@[A-Za-zА-Яа-яё0-9]*\b)[\s]/ig
+    let urlRegex = /(https?:\/\/)?([A-Za-zА-Яа-я0-9]+\.)?[A-Za-zА-Яа-я0-9]+\.[A-Za-zА-Яа-я0-9]{2,}(\/[\S]+)?/ig
+    let hashtagsRegex = /\B#[A-Za-zА-Яа-яё0-9]+/ig
+    let MenschenRegex = /\B@[A-Za-zА-Яа-яё0-9]+/ig
     let mailRegex = /\S+@\S+\.\S+/ig
 
     let cleantText: string = ''
 
-    cleantText = nodeText
-        .replace(urlRegex, (tagA, taB) => `<a>${taB}</a> `)
-        .replace(mailRegex, (tagA, taB) => `<a>${taB}</a> `)
-        .replace(MenschenRegex, (tagA, taB) => `<a>${taB}</a> `)
-        .replace(hashtagsRegex, (tagA, taB) => `<a>${taB}</a> `)
+    cleantText = cleanUpText(nodeText)
+        .replace(urlRegex, (tag) => `<a>${tag}</a>`)
+        .replace(mailRegex, (tag) => `<a>${tag}</a>`)
+        .replace(MenschenRegex, (tag) => `<a>${tag}</a>`)
+        .replace(hashtagsRegex, (tag) => `<a>${tag}</a>`)
 
     return cleantText
 }
