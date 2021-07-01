@@ -153,7 +153,7 @@ function cleanUpText(textPast: string) {
  * -- тут бы RegExp поправить, но сейчас их править не честно
 */
 function detectHighlightTarget(nodeText: string) {
-    let urlRegex = /(https?:\/\/)?([A-Za-zА-Яа-я0-9]+\.)?[A-Za-zА-Яа-я0-9]+\.[A-Za-zА-Яа-я0-9]{2,}(\/[\S]+)?/ig
+    let urlRegex = /(https?:\/\/)+([A-Za-zА-Яа-я0-9]+\.)?[A-Za-zА-Яа-я0-9]+\.[A-Za-zА-Яа-я0-9]{2,}(\/[\S]+)?/ig
     let hashtagsRegex = /\B#[A-Za-zА-Яа-яё0-9]+/ig
     let MenschenRegex = /\B@[A-Za-zА-Яа-яё0-9]+/ig
     let mailRegex = /\S+@\S+\.\S+/ig
