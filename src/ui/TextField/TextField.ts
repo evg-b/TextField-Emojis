@@ -114,7 +114,6 @@ export class TextField {
         let cleantText = detectHighlightTarget(allText)
         // Если появился новый или исчез старый кандидат на highlight тогда запускаем замену.
         if (allText !== cleantText) {
-
             let realDom = createDOMmap(this.textFieldInput)
             let virtualDom = createDOMmap(stringToHTML(cleantText))
 
@@ -137,9 +136,9 @@ export class TextField {
 }
 // Чистим текст и пропускаем только то что нужно
 function cleanUpText(textPast: string) {
-    let tagRegex = /<[^>]+>/igm
-    let style = /(style="[^"]*")/igm
-    let validTagsRegex = /(<img class="emoji" src=".*" >)|(<br\/?>)/igm
+    let tagRegex = /<[^>]+>/ig
+    let style = /(style="[^"]*")/ig
+    let validTagsRegex = /(<img class="emoji" src=".*">)|(<br\/?>)/ig
 
     let res = textPast
         .replace(style, '')
@@ -172,3 +171,7 @@ function detectHighlightTarget(nodeText: string) {
 function fixContentaditable(string: string) {
     return string === '<br>'
 }
+// function recoveryCursor(node: HTMLElement, startIndex: number, endIndex: number) {
+//     const sel = window.getSelection() || document.getSelection()
+
+// }

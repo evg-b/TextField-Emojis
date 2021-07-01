@@ -87,7 +87,10 @@ const btnIcon = Button({
     className: ['icon-button'],
     children: Smile,
     onClick: () => {
-        (emojiContainer as HTMLElement).classList.toggle('emoji-container-hidden')
+        store.setState(s => ({
+            ...s,
+            showEmoji: !s.showEmoji
+        }))
     }
 })
 
@@ -185,7 +188,7 @@ document.addEventListener('keydown', (e) => {
             showEmoji: !s.showEmoji
         }))
     }
-    if (e.ctrlKey && e.key === '`') {
+    if (e.ctrlKey && e.code === 'Backquote') {
         e.preventDefault()
         store.setState(s => ({
             ...s,
